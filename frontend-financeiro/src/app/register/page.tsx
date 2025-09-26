@@ -162,6 +162,7 @@ export default function RegisterPage() {
                   >
                     {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
+                {error && <p className="text-sm text-red-600 mt-1">{error}</p>}
                 </div>
               </div>
               <Button type="submit" className="w-full h-11">
