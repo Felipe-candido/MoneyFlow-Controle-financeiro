@@ -1,11 +1,27 @@
+'use client'
+
 import { DashboardHeader } from "@/components/dashboard/dashboard-header"
 import { BalanceCards } from "@/components/dashboard/balance-cards"
 import { TransactionChart } from "@/components/dashboard/transaction-chart"
 import { ExpenseBreakdownChart } from "@/components/dashboard/expense-breakdown-chart"
 import { RecentTransactions } from "@/components/dashboard/recent-transactions"
 import { QuickActions } from "@/components/dashboard/quick-actions"
+import { useAuth } from "@/src/context/AuthContext";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import LoginPage from "../login/page"
 
 export default function DashboardPage() {
+  const { user } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!user) {
+      // Se o usuário não estiver autenticado, redirecionar para a página de login
+      router.push('/login')
+    }
+  }, [user, router]);
+ 
   return (
     <div className="min-h-screen bg-background">
       <DashboardHeader />

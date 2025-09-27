@@ -6,6 +6,7 @@ import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
 import firebase_app from '@/lib/firebase'; // Seu arquivo de config do Firebase
 
 
+
 // Inicializa o serviço de autenticação do Firebase
 const auth = getAuth(firebase_app);
 

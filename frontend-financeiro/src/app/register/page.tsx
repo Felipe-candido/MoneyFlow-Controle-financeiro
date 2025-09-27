@@ -9,7 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Eye, EyeOff, DollarSign } from "lucide-react"
-import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
+import { createUserWithEmailAndPassword, getAuth, updateProfile } from 'firebase/auth';
 import firebase_app from '@/lib/firebase';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
@@ -42,6 +42,12 @@ export default function RegisterPage() {
       const userCredencial = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredencial.user;
       console.log("Usuário cadastrado no Firebase Auth:", user);
+
+      // ATUALIZANDO INFORMAÇÕES DE AUTENTICAÇÃO DO FIREBASEAUTH
+      await updateProfile(user, {
+        displayName: nome
+      });
+      console.log("Nome do usuário atualizado no Firebase Auth:", user.displayName);
       
       // SALVAR PERFIL NO BACKEND (NO BANCO FIRESTORE)
       console.log("Tentando salvar perfil do usuario no Firestore via backend");
