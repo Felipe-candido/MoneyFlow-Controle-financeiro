@@ -25,6 +25,8 @@ import { Calendar } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { format } from "date-fns"
 import { cn } from "@/lib/utils"
+import { useAuth } from "@/src/context/AuthContext";
+import axios from "axios"
 
 interface AddTransactionModalProps {
   isOpen: boolean
@@ -53,11 +55,15 @@ export function AddTransactionModal({ isOpen, onClose, type }: AddTransactionMod
     category: "",
     description: "",
     date: new Date(),
+    type: type,
   })
+
+  const { user } = useAuth();
+  if (!user) return null; // Garantir que o usuário está autenticado antes de renderizar o modal
 
   const categories = type === "income" ? incomeCategories : expenseCategories
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     // TODO: Implement transaction creation logic
     console.log("Transaction data:", { ...formData, type })
@@ -68,7 +74,24 @@ export function AddTransactionModal({ isOpen, onClose, type }: AddTransactionMod
       category: "",
       description: "",
       date: new Date(),
+      type: type,
     })
+
+    const token = await user.getIdToken()
+
+    const response = await axios.post("http://localhost:3000/transactions/add",
+      {
+        transaction : formData
+      },
+      {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      }
+    )
+    console.log("Noca transação:", response.data);
+
+    
   }
 
   const handleChange = (field: string, value: string | Date) => {
