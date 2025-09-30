@@ -59,7 +59,7 @@ export function AddTransactionModal({ isOpen, onClose, type }: AddTransactionMod
   })
 
   const { user } = useAuth();
-  if (!user) return null; // Garantir que o usuário está autenticado antes de renderizar o modal
+
 
   const categories = type === "income" ? incomeCategories : expenseCategories
 
@@ -77,7 +77,7 @@ export function AddTransactionModal({ isOpen, onClose, type }: AddTransactionMod
       type: type,
     })
 
-    const token = await user.getIdToken()
+    const token = await user?.getIdToken()
 
     const transaction = {
         ...formData,

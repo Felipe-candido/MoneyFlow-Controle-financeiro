@@ -22,7 +22,7 @@ export function RecentTransactions() {
   const [mes, setMes] = useState<string | null>(null)
   const [transactionList, setTransactionList] = useState<Transaction[]>([])
   const { user } = useAuth();
-  if (!user) return null; // Garantir que o usuário está autenticado antes de renderizar o componente
+  // Garantir que o usuário está autenticado antes de renderizar o componente
 
 
 
@@ -35,7 +35,7 @@ export function RecentTransactions() {
   }, []);
 
   const getTransactionsMes = async () => {
-    const token = await user.getIdToken()
+    const token = await user?.getIdToken()
     try{
       const response = await axios.get("http://localhost:3000/transactions/month", {
         headers: {

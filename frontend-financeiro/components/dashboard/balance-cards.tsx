@@ -18,12 +18,12 @@ export function BalanceCards() {
   const currentMonth = currentDate.toLocaleString("default", { month: "long", year: "numeric" })
   const [ totalBalance, setTotalBalance ] = useState<Balance>()
   const { user } = useAuth()
-  if (!user) return null
+  
 
   
   const fetchTotalBalance = async () => {
     try{
-      const token = await user.getIdToken()
+      const token = await user?.getIdToken()
       const response = await axios.get("http://localhost:3000/transactions/balance", {
         headers:{
           'Authorization': `Bearer ${token}`
