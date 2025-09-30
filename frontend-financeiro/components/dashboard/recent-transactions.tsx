@@ -6,6 +6,7 @@ import { ArrowUpRight, ShoppingCart, Car, Home, Coffee, Icon } from "lucide-reac
 import { useState, useEffect, AwaitedReactNode, JSXElementConstructor, Key, ReactElement, ReactNode, ReactPortal } from "react"
 import { useAuth } from "@/src/context/AuthContext";
 import axios from "axios"
+import { formatCurrency } from "@/lib/formatters"
 
 
 interface Transaction {
@@ -90,7 +91,7 @@ export function RecentTransactions() {
                   </div>
                 </div>
                 <div className={`font-semibold ${isIncome ? "text-accent" : "text-foreground"}`}>
-                  {isIncome ? "+" : ""}${Math.abs(transaction.amount).toFixed(2)}
+                  {isIncome ? "+" : "-"}{ formatCurrency(transaction.amount)}
                 </div>
               </div>
             )

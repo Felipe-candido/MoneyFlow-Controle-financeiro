@@ -22,11 +22,13 @@ export class TransactionsController {
     create(@Body() transaction: TransactionDTO, @Req() req) {
         return this.transactionsService.create(transaction, req.user.uid);
     }
+    
 
     @Get('all')
     findAll(@Req() req) {
         return this.transactionsService.findAll(req.user.uid);
     }
+
 
     @Get('month')
     findAllByMonth(@Req() req) {
@@ -37,6 +39,7 @@ export class TransactionsController {
         return this.transactionsService.findAllByMonth(req.user.uid, month, year);
     }
 
+    
     @Get('balance')
     getBalance(@Req() req) {
         return this.transactionsService.calculateBalance(req.user.uid);

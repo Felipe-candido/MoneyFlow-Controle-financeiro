@@ -4,11 +4,19 @@ import { useState, useEffect } from "react"
 import axios from "axios"
 import { useAuth } from "@/src/context/AuthContext";
 import { headers } from "next/headers";
+import { formatCurrency } from "@/lib/formatters"
+
+interface Balance{
+  balance: number
+  income: number
+  expense: number
+}
+
 
 export function BalanceCards() {
   const currentDate = new Date()
   const currentMonth = currentDate.toLocaleString("default", { month: "long", year: "numeric" })
-  const [ totalBalance, setTotalBalance ] = useState(0)
+  const [ totalBalance, setTotalBalance ] = useState<Balance>()
   const { user } = useAuth()
   if (!user) return null
 
@@ -42,7 +50,7 @@ export function BalanceCards() {
           <DollarSign className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">$12,847.50</div>
+          <div className="text-2xl font-bold">{ formatCurrency(totalBalance?.balance ?? 0) }</div>
           <p className="text-xs text-muted-foreground">+2.5% from last month</p>
         </CardContent>
       </Card>
