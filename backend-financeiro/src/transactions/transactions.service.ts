@@ -32,7 +32,14 @@ export class TransactionsService {
     // BUSCA TODAS AS TRANSAÇÕES DO USUÁRIO
     async findAll(userId: string) {
         const snapshot = await this.collection.where('userId', '==', userId).get();
-        const transactions = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        const transactions = snapshot.docs.map(doc => {
+            const data = doc.data()
+            return{
+                id: doc.id,  
+                ...doc.data(),
+               date: data.date.toDate()
+            }
+         });
         return transactions;
     }
 
@@ -89,5 +96,11 @@ export class TransactionsService {
         });
 
         return { balance, income, expense }
+    }
+
+
+    // CALCULA O GASTO POR CATEGORIA
+    async balanceCategory(userId: string){
+        const transactions = await this.findAll(userId)
     }
 }

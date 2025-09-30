@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { DashboardHeader } from "@/components/dashboard/dashboard-header"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -9,6 +9,11 @@ import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { AddTransactionModal } from "@/components/dashboard/add-transaction-modal"
 import { Plus, Search, Filter, ArrowUpRight, ShoppingCart, Car, Home, Coffee } from "lucide-react"
+import { useAuth } from "@/src/context/AuthContext";
+import axios from "axios"
+import { getAuth } from "firebase/auth"
+import { useRouter } from "next/navigation"
+
 
 const allTransactions = [
   {
@@ -85,13 +90,56 @@ const allTransactions = [
   },
 ]
 
+interface Transaction {
+  id: number,
+  type: string,
+  category: string,
+  description: string,
+  amount: number,
+  date: string,
+}
+
 export default function TransactionsPage() {
   const [searchTerm, setSearchTerm] = useState("")
   const [filterType, setFilterType] = useState("all")
   const [addModalOpen, setAddModalOpen] = useState(false)
   const [modalType, setModalType] = useState<"income" | "expense">("expense")
+  const [ transactionList, setTransactionList ] = useState<Transaction[]>([])
+  const { user } = useAuth();
+  const router = useRouter();
+  
 
-  const filteredTransactions = allTransactions.filter((transaction) => {
+  useEffect(() => {
+    if (!user) {
+      // Se o usuário não estiver autenticado, redirecionar para a página de login
+      router.push('/login')
+    }
+  }, [user, router]);
+
+  const getAllTransactions = async () => {
+    try{
+      const token = await user?.getIdToken()
+      const response = await axios.get("http://localhost:3000/transactions/all", {
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      })
+  
+      console.log("Requisição todas as transações do usuario: ", response.data)
+      setTransactionList(response.data as Transaction[])
+    }
+    catch (error){
+      console.log("ERRO: ", error)
+    }
+  }
+
+  useEffect(() => {
+    getAllTransactions()
+  },[])
+
+  
+
+  const filteredTransactions = transactionList.filter((transaction) => {
     const matchesSearch =
       transaction.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
       transaction.category.toLowerCase().includes(searchTerm.toLowerCase())
@@ -160,7 +208,7 @@ export default function TransactionsPage() {
           <CardContent>
             <div className="space-y-4">
               {filteredTransactions.map((transaction) => {
-                const Icon = transaction.icon
+                // const Icon = transaction.icon
                 const isIncome = transaction.type === "income"
 
                 return (
@@ -174,7 +222,7 @@ export default function TransactionsPage() {
                           isIncome ? "bg-accent/10" : "bg-muted"
                         }`}
                       >
-                        <Icon className={`w-5 h-5 ${isIncome ? "text-accent" : "text-muted-foreground"}`} />
+                        {/* <Icon className={`w-5 h-5 ${isIncome ? "text-accent" : "text-muted-foreground"}`} /> */}
                       </div>
                       <div>
                         <p className="font-medium">{transaction.description}</p>

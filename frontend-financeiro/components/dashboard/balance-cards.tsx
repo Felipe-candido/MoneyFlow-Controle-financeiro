@@ -61,7 +61,7 @@ export function BalanceCards() {
           <TrendingDown className="h-4 w-4 text-destructive" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold text-destructive">$2,847.30</div>
+          <div className="text-2xl font-bold text-destructive">{ formatCurrency(totalBalance?.expense ?? 0) }</div>
           <p className="text-xs text-muted-foreground">+12% from last month</p>
         </CardContent>
       </Card>
@@ -72,7 +72,7 @@ export function BalanceCards() {
           <TrendingUp className="h-4 w-4 text-accent" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold text-accent">$5,200.00</div>
+          <div className="text-2xl font-bold text-accent">{ formatCurrency(totalBalance?.income ?? 0) }</div>
           <p className="text-xs text-muted-foreground">+8% from last month</p>
         </CardContent>
       </Card>
