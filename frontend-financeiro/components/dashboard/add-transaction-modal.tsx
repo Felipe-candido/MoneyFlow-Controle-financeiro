@@ -79,17 +79,21 @@ export function AddTransactionModal({ isOpen, onClose, type }: AddTransactionMod
 
     const token = await user.getIdToken()
 
+    const transaction = {
+        ...formData,
+        amount: parseFloat(formData.amount) // Converte a string "500" para o número 500
+    };
+    console.log("Enviando transação:", transaction.date);
+
     const response = await axios.post("http://localhost:3000/transactions/add",
-      {
-        transaction : formData
-      },
+      transaction,
       {
         headers: {
           'Authorization': `Bearer ${token}`
         }
       }
     )
-    console.log("Noca transação:", response.data);
+    console.log("Nova transação:", response.data);
 
     
   }
@@ -173,7 +177,6 @@ export function AddTransactionModal({ isOpen, onClose, type }: AddTransactionMod
                       mode="single"
                       selected={formData.date}
                       onSelect={(date) => date && handleChange("date", date)}
-                      initialFocus
                     />
                   </PopoverContent>
                 </Popover>

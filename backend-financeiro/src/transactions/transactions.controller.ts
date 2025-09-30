@@ -23,8 +23,17 @@ export class TransactionsController {
         return this.transactionsService.create(transaction, req.user.uid);
     }
 
-    @Get()
+    @Get('all')
     findAll(@Req() req) {
         return this.transactionsService.findAll(req.user.uid);
+    }
+
+    @Get('month')
+    findAllByMonth(@Req() req) {
+        const now = new Date();
+        const month = now.getMonth() + 1;
+        const year = now.getFullYear();
+        console.log("Mês atual:", month, "Ano atual:", year, req.user.uid);
+        return this.transactionsService.findAllByMonth(req.user.uid, month, year);
     }
 }

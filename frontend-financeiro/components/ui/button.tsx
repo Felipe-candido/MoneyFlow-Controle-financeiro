@@ -35,25 +35,36 @@ const buttonVariants = cva(
   },
 )
 
-function Button({
-  className,
-  variant,
-  size,
-  asChild = false,
-  ...props
-}: React.ComponentProps<'button'> &
-  VariantProps<typeof buttonVariants> & {
-    asChild?: boolean
-  }) {
-  const Comp = asChild ? Slot : 'button'
-
-  return (
-    <Comp
-      data-slot="button"
-      className={cn(buttonVariants({ variant, size, className }))}
-      {...props}
-    />
-  )
+// A interface de props continua a mesma
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {
+  asChild?: boolean
 }
+
+// --- INÍCIO DAS MUDANÇAS ---
+
+// 1. Envelopamos a definição do componente com React.forwardRef
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  // 2. A função do componente agora recebe "props" e a "ref"
+  ({ className, variant, size, asChild = false, ...props }, ref) => {
+    const Comp = asChild ? Slot : 'button'
+
+    return (
+      <Comp
+        data-slot="button"
+        className={cn(buttonVariants({ variant, size, className }))}
+        // 3. Passamos a ref para o elemento DOM real (<button> ou Slot)
+        ref={ref}
+        {...props}
+      />
+    )
+  }
+)
+// 4. (Boa prática) Adicionamos um nome de exibição para facilitar a depuração
+Button.displayName = "Button"
+
+// --- FIM DAS MUDANÇAS ---
+
 
 export { Button, buttonVariants }

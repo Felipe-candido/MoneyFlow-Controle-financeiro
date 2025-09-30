@@ -1,65 +1,68 @@
+"use client"
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { ArrowUpRight, ShoppingCart, Car, Home, Coffee } from "lucide-react"
+import { ArrowUpRight, ShoppingCart, Car, Home, Coffee, Icon } from "lucide-react"
+import { useState, useEffect, AwaitedReactNode, JSXElementConstructor, Key, ReactElement, ReactNode, ReactPortal } from "react"
+import { useAuth } from "@/src/context/AuthContext";
+import axios from "axios"
 
-const transactions = [
-  {
-    id: 1,
-    type: "expense",
-    category: "Groceries",
-    description: "Whole Foods Market",
-    amount: -127.5,
-    date: "2024-01-15",
-    icon: ShoppingCart,
-  },
-  {
-    id: 2,
-    type: "income",
-    category: "Salary",
-    description: "Monthly Salary",
-    amount: 5200.0,
-    date: "2024-01-15",
-    icon: ArrowUpRight,
-  },
-  {
-    id: 3,
-    type: "expense",
-    category: "Transportation",
-    description: "Gas Station",
-    amount: -45.2,
-    date: "2024-01-14",
-    icon: Car,
-  },
-  {
-    id: 4,
-    type: "expense",
-    category: "Utilities",
-    description: "Electric Bill",
-    amount: -89.3,
-    date: "2024-01-13",
-    icon: Home,
-  },
-  {
-    id: 5,
-    type: "expense",
-    category: "Food & Dining",
-    description: "Coffee Shop",
-    amount: -12.5,
-    date: "2024-01-13",
-    icon: Coffee,
-  },
-]
+
+interface Transaction {
+  id: number,
+  type: string,
+  category: string,
+  description: string,
+  amount: number,
+  date: string,
+}
 
 export function RecentTransactions() {
+  const [mes, setMes] = useState<string | null>(null)
+  const [transactionList, setTransactionList] = useState<Transaction[]>([])
+  const { user } = useAuth();
+  if (!user) return null; // Garantir que o usuário está autenticado antes de renderizar o componente
+
+
+
+  useEffect(() => {
+    const agora = new Date();
+    const formatada = agora.toLocaleDateString("pt-BR", {
+      month: "long",
+    });
+    setMes(formatada);
+  }, []);
+
+  const getTransactionsMes = async () => {
+    const token = await user.getIdToken()
+    try{
+      const response = await axios.get("http://localhost:3000/transactions/month", {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
+      
+      setTransactionList(response.data as Transaction[])
+      console.log("Transações do mês:", response.data)
+    }
+    catch (error){
+      console.error("Erro ao buscar transaçõess:", error)
+    }
+  }
+
+  useEffect(() => {
+    getTransactionsMes()
+  }, [])
+
+
   return (
     <Card className="border-border/50">
       <CardHeader>
-        <CardTitle className="text-lg">Recent Transactions</CardTitle>
+        <CardTitle className="text-lg">Recent Transactions -  { mes }</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {transactions.map((transaction) => {
-            const Icon = transaction.icon
+          {transactionList?.map((transaction) => {
             const isIncome = transaction.type === "income"
 
             return (
@@ -73,7 +76,6 @@ export function RecentTransactions() {
                       isIncome ? "bg-accent/10" : "bg-muted"
                     }`}
                   >
-                    <Icon className={`w-4 h-4 ${isIncome ? "text-accent" : "text-muted-foreground"}`} />
                   </div>
                   <div>
                     <p className="font-medium">{transaction.description}</p>
