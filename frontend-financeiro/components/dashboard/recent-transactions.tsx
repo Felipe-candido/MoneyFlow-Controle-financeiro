@@ -90,7 +90,7 @@ export function RecentTransactions() {
                     </div>
                   </div>
                 </div>
-                <div className={`font-semibold ${isIncome ? "text-accent" : "text-foreground"}`}>
+                <div className={`font-semibold ${isIncome ? "text-accent" : "text-destructive"}`}>
                   {isIncome ? "+" : "-"}{ formatCurrency(transaction.amount)}
                 </div>
               </div>
