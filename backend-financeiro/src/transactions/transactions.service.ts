@@ -10,6 +10,8 @@ export class TransactionsService {
         this.collection = this.firebaseService.getFirestore().collection('transactions');
     }
 
+
+    // CRIA UMA NOVA TRANSAÇÃO NO BANCO DE DADOS
     async create(createTransactionDTO: any, userId: string) {
         const dateString = createTransactionDTO.date;
         const date = new Date(dateString);
@@ -26,12 +28,16 @@ export class TransactionsService {
         return { id: docRef.id, ...newTransaction };
     }
 
+
+    // BUSCA TODAS AS TRANSAÇÕES DO USUÁRIO
     async findAll(userId: string) {
         const snapshot = await this.collection.where('userId', '==', userId).get();
         const transactions = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         return transactions;
     }
 
+
+    // BUSCA TODAS AS TRANSAÇÕES DO MES ATUAL
     async findAllByMonth(userId: string, month: number, year: number) {
         const startDate = new Date(Date.UTC(year, month - 1, 1));
         const endDate = new Date(Date.UTC(year, month, 1));
@@ -43,7 +49,6 @@ export class TransactionsService {
         console.log("Data de fim (UTC):", endDate.toISOString());     
         console.log("--------------------------------");
     
-    // Último dia do mês]
         const snapshot = await this.collection
             .where('userId', '==', userId)
             .where('date', '>=', startDate)
@@ -62,5 +67,27 @@ export class TransactionsService {
         console.log("Transações do mês no service:", transactions);
         console.log("quantidadae:", transactions.length);
         return transactions;
+    }
+
+
+    // CALCULA O BALANÇO TOTAL (RECEITAS - DESPESAS) DO USUÁRIO
+    async calculateBalance(userId: string) {
+        let balance = 0;
+        let income = 0;
+        let expense = 0;
+
+        const transactions = await this.findAll(userId);
+        
+        transactions.forEach(transaction => {
+            if(transaction.type === 'income'){
+                income += transaction.amount;
+                balance += transaction.amount;
+            } else if(transaction.type === 'expense'){
+                expense += transaction.amount;
+                balance -= transaction.amount;
+            }
+        });
+
+        return { balance, income, expense }
     }
 }

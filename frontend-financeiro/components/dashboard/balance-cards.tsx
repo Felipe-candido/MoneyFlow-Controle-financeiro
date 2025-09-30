@@ -1,9 +1,38 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { TrendingUp, TrendingDown, DollarSign, CreditCard } from "lucide-react"
+import { useState, useEffect } from "react"
+import axios from "axios"
+import { useAuth } from "@/src/context/AuthContext";
+import { headers } from "next/headers";
 
 export function BalanceCards() {
   const currentDate = new Date()
   const currentMonth = currentDate.toLocaleString("default", { month: "long", year: "numeric" })
+  const [ totalBalance, setTotalBalance ] = useState(0)
+  const { user } = useAuth()
+  if (!user) return null
+
+  
+  const fetchTotalBalance = async () => {
+    try{
+      const token = await user.getIdToken()
+      const response = await axios.get("http://localhost:3000/transactions/balance", {
+        headers:{
+          'Authorization': `Bearer ${token}`
+        }
+      })
+      console.log("dados da busca do balanço: ", response.data)
+
+      setTotalBalance(response.data)
+    }
+    catch (error){
+      console.log('Erro ao buscar informações sobre balanço total', error)
+    }
+  }
+
+  useEffect(() => {
+    fetchTotalBalance()
+  }, [])
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">

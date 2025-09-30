@@ -36,4 +36,9 @@ export class TransactionsController {
         console.log("Mês atual:", month, "Ano atual:", year, req.user.uid);
         return this.transactionsService.findAllByMonth(req.user.uid, month, year);
     }
+
+    @Get('balance')
+    getBalance(@Req() req) {
+        return this.transactionsService.calculateBalance(req.user.uid);
+    }
 }
