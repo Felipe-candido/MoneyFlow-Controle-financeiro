@@ -46,7 +46,7 @@ export function BalanceCards() {
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
       <Card className="border-border/50">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Current Balance</CardTitle>
+          <CardTitle className="text-sm font-medium">Saldo atual</CardTitle>
           <DollarSign className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
@@ -57,7 +57,7 @@ export function BalanceCards() {
 
       <Card className="border-border/50">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">{currentMonth} Expenses</CardTitle>
+          <CardTitle className="text-sm font-medium">Gastos {currentMonth}</CardTitle>
           <TrendingDown className="h-4 w-4 text-destructive" />
         </CardHeader>
         <CardContent>
@@ -68,7 +68,7 @@ export function BalanceCards() {
 
       <Card className="border-border/50">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">{currentMonth} Income</CardTitle>
+          <CardTitle className="text-sm font-medium">Ganhos {currentMonth}</CardTitle>
           <TrendingUp className="h-4 w-4 text-accent" />
         </CardHeader>
         <CardContent>
@@ -79,7 +79,7 @@ export function BalanceCards() {
 
       <Card className="border-border/50">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Savings Rate</CardTitle>
+          <CardTitle className="text-sm font-medium">Taxa de economia</CardTitle>
           <CreditCard className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>

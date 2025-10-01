@@ -180,7 +180,7 @@ export default function TransactionsPage() {
         <Card className="border-border/50">
           <CardHeader>
             <div className="flex items-center justify-between">
-              <CardTitle>Transaction History</CardTitle>
+              <CardTitle>Historico de transações</CardTitle>
               <div className="flex items-center space-x-2">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -197,9 +197,9 @@ export default function TransactionsPage() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All</SelectItem>
-                    <SelectItem value="income">Income</SelectItem>
-                    <SelectItem value="expense">Expenses</SelectItem>
+                    <SelectItem value="all">Tudo</SelectItem>
+                    <SelectItem value="income">Ganhos</SelectItem>
+                    <SelectItem value="expense">Despesas</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

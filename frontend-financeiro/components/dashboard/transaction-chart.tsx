@@ -42,22 +42,22 @@ export function TransactionChart() {
   return (
     <Card className="border-border/50">
       <CardHeader>
-        <CardTitle className="text-lg">Balance Overview</CardTitle>
-        <CardDescription>Your account balance over the last 30 days</CardDescription>
+        <CardTitle className="text-lg">Resumo de saldo</CardTitle>
+        <CardDescription>Seu saldo sobre os últimos 30 dias</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer
           config={{
             balance: {
-              label: "Balance",
+              label: "Saldo",
               color: "hsl(var(--chart-1))",
             },
             income: {
-              label: "Income",
+              label: "Ganhos",
               color: "hsl(var(--accent))",
             },
             expenses: {
-              label: "Expenses",
+              label: "Despesas",
               color: "hsl(var(--destructive))",
             },
           }}

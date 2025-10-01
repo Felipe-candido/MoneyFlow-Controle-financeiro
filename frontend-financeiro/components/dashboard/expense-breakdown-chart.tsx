@@ -19,7 +19,7 @@ export function ExpenseBreakdownChart() {
   return (
     <Card className="border-border/50">
       <CardHeader>
-        <CardTitle className="text-lg">Expense Breakdown</CardTitle>
+        <CardTitle className="text-lg">Gráfico de despesas</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="flex flex-col lg:flex-row items-center gap-6">

@@ -16,7 +16,7 @@ export function QuickActions() {
     <>
       <Card className="border-border/50">
         <CardHeader>
-          <CardTitle className="text-lg">Quick Actions</CardTitle>
+          <CardTitle className="text-lg">Ações rápidas</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
           <Button
@@ -26,7 +26,7 @@ export function QuickActions() {
             <div className="flex items-center justify-center w-8 h-8 bg-accent-foreground/10 rounded-lg mr-3">
               <ArrowUpRight className="w-4 h-4" />
             </div>
-            Add Income
+            Adicionar ganho
           </Button>
 
           <Button
@@ -37,7 +37,7 @@ export function QuickActions() {
             <div className="flex items-center justify-center w-8 h-8 bg-destructive/10 rounded-lg mr-3">
               <ArrowDownRight className="w-4 h-4 text-destructive" />
             </div>
-            Add Expense
+            Adicionar despesa
           </Button>
 
           <Button
