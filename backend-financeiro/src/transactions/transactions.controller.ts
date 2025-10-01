@@ -20,6 +20,11 @@ export class TransactionsController {
 
     @Post('add')
     create(@Body() transaction: TransactionDTO, @Req() req) {
+        console.log("=== CONTROLLER CREATE DEBUG ===");
+        console.log("Transaction received:", transaction);
+        console.log("Transaction type:", transaction.type);
+        console.log("User ID:", req.user.uid);
+        console.log("===============================");
         return this.transactionsService.create(transaction, req.user.uid);
     }
     

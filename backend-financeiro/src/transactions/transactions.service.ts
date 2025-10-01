@@ -13,6 +13,11 @@ export class TransactionsService {
 
     // CRIA UMA NOVA TRANSAÇÃO NO BANCO DE DADOS
     async create(createTransactionDTO: any, userId: string) {
+        console.log("=== SERVICE CREATE DEBUG ===");
+        console.log("DTO received:", createTransactionDTO);
+        console.log("DTO type:", createTransactionDTO.type);
+        console.log("User ID:", userId);
+        
         const dateString = createTransactionDTO.date;
         const date = new Date(dateString);
 
@@ -22,6 +27,10 @@ export class TransactionsService {
             userId,
             createdAt: new Date(),
         };
+
+        console.log("Transaction to save:", newTransaction);
+        console.log("Transaction type being saved:", newTransaction.type);
+        console.log("=============================");
 
         const docRef = await this.collection.add(newTransaction);
         
@@ -45,35 +54,48 @@ export class TransactionsService {
 
 
     // BUSCA TODAS AS TRANSAÇÕES DO MES ATUAL
+    // BUSCA TODAS AS TRANSAÇÕES DO MES ATUAL
     async findAllByMonth(userId: string, month: number, year: number) {
-        const startDate = new Date(Date.UTC(year, month - 1, 1));
-        const endDate = new Date(Date.UTC(year, month, 1));
-        
         console.log("--------------------------------");
-        console.log("Executando busca por mês em UTC...");
+        console.log("Executando busca por mês...");
         console.log("Procurando por userId:", userId);
-        console.log("Data de início (UTC):", startDate.toISOString()); 
-        console.log("Data de fim (UTC):", endDate.toISOString());     
+        console.log("Mês:", month, "Ano:", year);
         console.log("--------------------------------");
     
-        const snapshot = await this.collection
+        // Primeiro, vamos buscar todas as transações do usuário para debug
+        const allUserTransactions = await this.collection
             .where('userId', '==', userId)
-            .where('date', '>=', startDate)
-            .where('date', '<', endDate)
             .get();
         
-        const transactions = snapshot.docs.map(doc => { 
-            const data = doc.data()
-            return{
-                id: doc.id, 
-                ...data,
-                date: data.date.toDate() // Converte Firestore Timestamp para Date';
-            }
-        });
+        console.log("Total de transações do usuário:", allUserTransactions.docs.length);
         
-        console.log("Transações do mês no service:", transactions);
-        console.log("quantidadae:", transactions.length);
-        return transactions;
+        // Se não há transações, retorna array vazio
+        if (allUserTransactions.docs.length === 0) {
+            console.log("Nenhuma transação encontrada para o usuário");
+            return [];
+        }
+    
+        // Filtrar transações do mês atual manualmente
+        const currentMonthTransactions = allUserTransactions.docs
+            .map(doc => {
+                const data = doc.data();
+                const transactionDate = data.date?.toDate ? data.date.toDate() : new Date(data.date);
+                return {
+                    id: doc.id,
+                    ...data,
+                    date: transactionDate
+                };
+            })
+            .filter(transaction => {
+                const transactionMonth = transaction.date.getMonth() + 1;
+                const transactionYear = transaction.date.getFullYear();
+                return transactionMonth === month && transactionYear === year;
+            });
+        
+        console.log("Transações do mês filtradas manualmente:", currentMonthTransactions.length);
+        console.log("Transações do mês no service:", currentMonthTransactions);
+        
+        return currentMonthTransactions;
     }
 
 

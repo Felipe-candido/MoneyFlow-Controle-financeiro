@@ -37,24 +37,36 @@ export function RecentTransactions() {
   const getTransactionsMes = async () => {
     const token = await user?.getIdToken()
     try{
+      console.log("=== FRONTEND DEBUG ===");
+      console.log("Token:", token ? "Presente" : "Ausente");
+      console.log("User:", user?.uid);
+      console.log("=========================");
+      
       const response = await axios.get("http://localhost:3000/transactions/month", {
         headers: {
           'Authorization': `Bearer ${token}`
         }
       })
-      
+ 
+      console.log("Response data:", response.data);
       setTransactionList(response.data as Transaction[])
-      console.log("Transações do mês:", response.data)
     }
-    catch (error){
-      console.error("Erro ao buscar transaçõess:", error)
+    catch (error: any){
+      console.error("Erro ao buscar transações:", error)
+      if (error.response) {
+        console.error("Status:", error.response.status);
+        console.error("Data:", error.response.data);
+      }
     }
   }
 
   useEffect(() => {
-    getTransactionsMes()
-  }, [])
-
+    // 1. Adicionamos uma "trava de segurança".
+    // A função de busca só será chamada se 'user' já estiver carregado.
+    if (user) {
+        getTransactionsMes();
+    }
+  }, [user]);
 
   return (
     <Card className="border-border/50">

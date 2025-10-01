@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -58,6 +58,12 @@ export function AddTransactionModal({ isOpen, onClose, type }: AddTransactionMod
     type: type,
   })
 
+  // Atualizar o tipo quando a prop mudar
+  useEffect(() => {
+    console.log("Modal type changed to:", type);
+    setFormData(prev => ({ ...prev, type: type }));
+  }, [type]);
+
   const { user } = useAuth();
 
 
@@ -65,38 +71,61 @@ export function AddTransactionModal({ isOpen, onClose, type }: AddTransactionMod
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // TODO: Implement transaction creation logic
-    console.log("Transaction data:", { ...formData, type })
-    onClose()
-    // Reset form
-    setFormData({
-      amount: "",
-      category: "",
-      description: "",
-      date: new Date(),
-      type: type,
-    })
+    
+    console.log("=== FRONTEND SUBMIT DEBUG ===");
+    console.log("Form data:", formData);
+    console.log("Type prop:", type);
+    console.log("=============================");
 
     const token = await user?.getIdToken()
 
     const transaction = {
         ...formData,
-        amount: parseFloat(formData.amount) // Converte a string "500" para o número 500
+        amount: parseFloat(formData.amount), // Converte a string "500" para o número 500
+        type: type // Garantir que o tipo seja o correto
     };
-    console.log("Enviando transação:", transaction.date);
-
-    const response = await axios.post("http://localhost:3000/transactions/add",
-      transaction,
-      {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      }
-    )
-    console.log("Nova transação:", response.data);
-
     
+    console.log("Enviando transação:", transaction);
+    console.log("Tipo da transação sendo enviada:", transaction.type);
+
+    try {
+      const response = await axios.post("http://localhost:3000/transactions/add",
+        transaction,
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        }
+      )
+      console.log("Nova transação criada:", response.data);
+      
+      // Reset form
+      setFormData({
+        amount: "",
+        category: "",
+        description: "",
+        date: new Date(),
+        type: type,
+      })
+      
+      onClose()
+    } catch (error) {
+      console.error("Erro ao criar transação:", error);
+    }
   }
+
+  // Reset form when modal closes
+  useEffect(() => {
+    if (!isOpen) {
+      setFormData({
+        amount: "",
+        category: "",
+        description: "",
+        date: new Date(),
+        type: type,
+      });
+    }
+  }, [isOpen, type]);
 
   const handleChange = (field: string, value: string | Date) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
