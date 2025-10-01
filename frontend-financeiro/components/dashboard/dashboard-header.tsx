@@ -56,6 +56,7 @@ export function DashboardHeader() {
               <p className="text-sm text-muted-foreground">Gerenciamento de finanças pessoais</p>
             </div>
           </div>
+        
 
           {/* Renderiza o perfil do usuário apenas se o usuário existir */}
           {user && (
