@@ -3,12 +3,14 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { ArrowUpRight, ArrowDownRight } from 'lucide-react'
+import { ArrowUpRight, ArrowDownRight, DollarSign } from 'lucide-react'
 import { AddTransactionModal } from "./add-transaction-modal"
+import { useRouter } from "next/navigation"
 
 export function QuickActions() {
   const [incomeModalOpen, setIncomeModalOpen] = useState(false)
   const [expenseModalOpen, setExpenseModalOpen] = useState(false)
+  const router = useRouter()
 
   return (
     <>
@@ -37,6 +39,19 @@ export function QuickActions() {
             </div>
             Add Expense
           </Button>
+
+          <Button
+            onClick={() => router.push("transactions")}
+            variant="outline"
+            className="w-full justify-start h-12"
+          >
+            <div className="flex items-center justify-center w-8 h-8 bg-accent/10 rounded-lg mr-3">
+              <DollarSign className="w-4 h-4 text-accent" />
+            </div>
+            Todas as transações
+          </Button>
+
+
         </CardContent>
       </Card>
 

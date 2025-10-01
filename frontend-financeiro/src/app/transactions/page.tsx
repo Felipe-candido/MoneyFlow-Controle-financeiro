@@ -158,13 +158,13 @@ export default function TransactionsPage() {
       <main className="container mx-auto px-4 py-6">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-2xl font-semibold text-balance">All Transactions</h1>
-            <p className="text-muted-foreground">Manage and track your financial transactions</p>
+            <h1 className="text-2xl font-semibold text-balance">Todas as transações</h1>
+            <p className="text-muted-foreground">Gerencie e rastreie todas as suas transações financeiras</p>
           </div>
           <div className="flex items-center space-x-2">
             <Button onClick={() => handleAddTransaction("income")} className="bg-accent hover:bg-accent/90">
               <Plus className="w-4 h-4 mr-2" />
-              Add Income
+              Adicionar Ganho
             </Button>
             <Button
               onClick={() => handleAddTransaction("expense")}
@@ -172,7 +172,7 @@ export default function TransactionsPage() {
               className="border-destructive/20 hover:bg-destructive/5"
             >
               <Plus className="w-4 h-4 mr-2" />
-              Add Expense
+              Adicionar gasto
             </Button>
           </div>
         </div>
